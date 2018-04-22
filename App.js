@@ -1,21 +1,20 @@
 import React from 'react';
 import { StyleSheet, Dimensions, View } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
+import { TwMapView } from './TwMapView.js';
+import { TwListView } from './TwListView.js';
 
 const initialLayout = {
   height: 0,
   width: Dimensions.get('window').width,
 };
 
-const listView = () => <View style={[ styles.container, { backgroundColor: '#ff4081' } ]} />;
-const mapView = () => <View style={[ styles.container, { backgroundColor: '#673ab7' } ]} />;
-
 export default class App extends React.Component {
   state = {
     index: 0,
     routes: [
-      { key: 'first', title: 'List' },
-      { key: 'second', title: 'Map' },
+      { key: 'list', title: 'List' },
+      { key: 'map', title: 'Map' },
     ],
   };
 
@@ -24,8 +23,8 @@ export default class App extends React.Component {
   _renderFooter = props => <TabBar {...props} />;
 
   _renderScene = SceneMap({
-    first: listView,
-    second: mapView,
+    list: TwListView,
+    map: TwMapView,
   });
 
   render() {
