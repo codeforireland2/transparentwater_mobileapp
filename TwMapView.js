@@ -14,7 +14,7 @@ export class TwMapView extends React.Component {
 		}
     }
 	
-	onRegionChange (region) {
+	onRegionChange(region) {
 		this.setState({ region });
 	}
 
@@ -25,7 +25,7 @@ export class TwMapView extends React.Component {
 				<MapView
 					style={styles.map}
 					initialRegion={this.state.region}
-					onRegionChange={this.onRegionChange}
+					onRegionChange={() => this.onRegionChange.bind(this)}
 					showsUserLocation={true}
 				/>
 			</View>
