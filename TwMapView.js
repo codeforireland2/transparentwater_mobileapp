@@ -14,6 +14,11 @@ export class TwMapView extends React.Component {
 		}
     }
 	
+	constructor(props){
+		
+		super(props);
+	}
+	
 	onRegionChange(region) {
 		this.setState({ region });
 	}
@@ -27,7 +32,19 @@ export class TwMapView extends React.Component {
 					initialRegion={this.state.region}
 					onRegionChange={() => this.onRegionChange.bind(this)}
 					showsUserLocation={true}
-				/>
+				>
+					{this.props.data.map((notice) => {
+						return (<MapView.Marker
+							key={notice.OBJECTID}
+							coordinate={{
+								latitude: notice.LAT,
+								longitude: notice.LONG
+							}}
+							title={notice.TITLE}
+							description={notice.NOTICETYPE[0]}
+						/>);
+					})}
+				</MapView>
 			</View>
 		);
 	}
@@ -37,7 +54,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1
 	},
-  map: {
-    flex: 1
-  },
+	map: {
+		flex: 1
+	},
 });
