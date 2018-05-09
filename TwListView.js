@@ -16,14 +16,13 @@ export class TwListView extends React.Component {
 		
 
 		return (
-			  <View  />
 			  <View style={styles.container}>
 			  {this.props.data.map((item) => {
 			  	console.log(item.TITLE)
-			  	return(<Text key={item.OBJECTID}>{item.TITLE}</Text>)
+			  	return(<Text key={item.OBJECTID} >{item.TITLE}</Text>)
  				
 			  })}
-			  </View  >
+			  </View>
 			  
 
 		);
