@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Dimensions, View } from 'react-native';
 import MapView from 'react-native-maps';
 
+"LALALLALALA THIS IS GONNA GET REJECTED"
 
 export class TwMapView extends React.Component {
 	
