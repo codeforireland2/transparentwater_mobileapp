@@ -1,0 +1,15 @@
+{
+    "extends": "airbnb",
+    "parser": "babel-eslint",
+    "rules": {
+        "indent": ["error", 2],
+        "max-len": [2, {"code": 100, "tabWidth": 2, "ignoreUrls": true}],
+        "space-before-function-paren": "off",
+        "prefer-destructuring": "off",
+        "object-shorthand": "off",
+        "react/jsx-filename-extension": "off",
+        "no-underscore-dangle": ["error", { "allowAfterThis": true }],
+        "comma-dangle": ["error", "never"],
+        "import/prefer-default-export": "off"
+    }
+}
