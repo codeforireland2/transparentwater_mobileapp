@@ -30,5 +30,14 @@ npm start
 
 Scan the QR Code with your phone to open the app on your device
 
+## Testing
+
+We are using Javascript Lint for testing and continuous integration. You can check your code by running the following command to check the code for mistakes and run all automatic tests.
+
+```
+npm run check
+```
+
+This will also run automatically whenever you push a change or update a pull request. 
 
 
