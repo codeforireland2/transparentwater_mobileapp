@@ -1,4 +1,4 @@
-# Project Title
+# Transparent Water - Mobile App
 
 This is the repository for the mobile end of the transparent water project being developed in 2018
 
