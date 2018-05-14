@@ -38,7 +38,7 @@ export default class App extends React.Component {
   _renderScene = ({ route }) => {
     switch (route.key) {
     case 'map':
-          return <TwMapView data={this.state.data}/>;
+      return <TwMapView data={this.state.data} />;
     default:
       return <TwListView data={sample} />;
     }

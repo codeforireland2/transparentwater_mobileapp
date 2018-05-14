@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -21,11 +22,6 @@ export class TwMapView extends React.Component {
     }
   }
 
-	constructor(props){
-		
-		super(props);
-	}
-	
   onRegionChange(region) {
     this.setState({ region });
   }
@@ -38,20 +34,46 @@ export class TwMapView extends React.Component {
           initialRegion={this.state.region}
           onRegionChange={() => this.onRegionChange.bind(this)}
           showsUserLocation={true} // eslint-disable-line react/jsx-boolean-value
-				>
-					{this.props.data.map((notice) => {
-						return (<MapView.Marker
-							key={notice.OBJECTID}
-							coordinate={{
-								latitude: notice.LAT,
-								longitude: notice.LONG
-							}}
-							title={notice.TITLE}
-							description={notice.NOTICETYPE[0]}
-						/>);
-					})}
-				</MapView>
+        >
+          {this.props.data.map(notice => (
+            <MapView.Marker
+              key={notice.OBJECTID}
+              coordinate={{
+                latitude: notice.LAT,
+                longitude: notice.LONG
+              }}
+              title={notice.TITLE}
+              description={notice.NOTICETYPE[0]}
+            />
+          ))}
+        </MapView>
       </View>
     );
   }
 }
+
+TwMapView.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    OBJECTID: PropTypes.number,
+    WORKTYPE: PropTypes.string,
+    TITLE: PropTypes.string,
+    STARTDATE: PropTypes.number,
+    ENDDATE: PropTypes.number,
+    CONTACTDETAILS: PropTypes.string,
+    AFFECTEDPREMISES: PropTypes.string,
+    TRAFFICIMPLICATIONS: PropTypes.string,
+    DESCRIPTION: PropTypes.string,
+    STATUS: PropTypes.string,
+    GLOBALID: PropTypes.string,
+    APPROVALSTATUS: PropTypes.string,
+    LOCATION: PropTypes.string,
+    PRIORITY: PropTypes.string,
+    COUNTY: PropTypes.string,
+    REFERENCENUM: PropTypes.string,
+    PROJECTNUMBER: PropTypes.string,
+    PROJECT: PropTypes.string,
+    LAT: PropTypes.number,
+    LONG: PropTypes.number,
+    NOTICETYPE: PropTypes.arrayOf(PropTypes.string)
+  })).isRequired
+};
