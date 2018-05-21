@@ -19,6 +19,10 @@ const styles = StyleSheet.create({ // eslint-disable-line no-unused-vars
   }
 });
 
+/**
+* @class App
+* Main View of the application showing tabs for the list and mapview
+*/
 export default class App extends React.Component {
   state = {
     index: 0, // eslint-disable-line react/no-unused-state
@@ -44,6 +48,10 @@ export default class App extends React.Component {
     }
   }
 
+  /**
+  * @function render
+  * setting up the view
+  */
   render() {
     return (
       <TabViewAnimated

@@ -11,7 +11,14 @@ const styles = StyleSheet.create({
 // disabled for now, at least until we figure out if this
 // will have state or not
 /* eslint-disable react/prefer-stateless-function */
+/**
+* @class TwListView
+* display of the data in a list
+*/
 export class TwListView extends React.Component {
+  /**
+  * @function render
+  */
   render() {
     const props = this.props;
     return (

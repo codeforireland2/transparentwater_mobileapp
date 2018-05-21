@@ -14,7 +14,13 @@ jest.mock('react-native-maps', () => { // eslint-disable-line no-undef
   const MockMarker = () => React.createElement('Marker', this.props, this.props.children);
 
   /* eslint-disable react/prefer-stateless-function */
+  /**
+  * @class MockMapView
+  */
   class MockMapView extends React.Component {
+    /**
+    * @function render
+    */
     render() {
       return React.createElement('MapView', this.props, this.props.children);
     }
