@@ -13,6 +13,7 @@
     "eslint-plugin-react": "^7.7.0",
     "jest": "^22.4.3",
     "jest-expo": "^27.0.1",
+    "jsdoc": "^3.5.5",
     "prop-types": "^15.6.1",
     "react-test-renderer": "^16.3.2"
   },
@@ -23,7 +24,9 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "lint": "./node_modules/.bin/eslint .",
+    "partial-lint": "git diff --name-only master... | grep js$ | xargs ./node_modules/.bin/eslint",
     "check": "npm run lint && npm run test",
+    "tempcheck": "npm run partial-lint && npm run test",
     "test": "jest"
   },
   "author": "",
