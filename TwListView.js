@@ -1,12 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white'
-  }
-});
+import { ScrollView, Text } from 'react-native';
 
 // disabled for now, at least until we figure out if this
 // will have state or not
@@ -22,12 +15,12 @@ export class TwListView extends React.Component {
   render() {
     const props = this.props;
     return (
-      <View style={styles.container}>
+      <ScrollView>
         {props.data.map((item) => {
           console.log(item.TITLE);
           return (<Text key={item.OBJECTID}>{item.TITLE}</Text>);
         })}
-      </View>
+      </ScrollView>
     );
   }
 }
