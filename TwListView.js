@@ -1,5 +1,18 @@
 import React from 'react';
-import { ScrollView, Text } from 'react-native';
+import { StyleSheet, ScrollView, Text } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 4,
+    borderWidth: 1.0,
+    flex: 10,
+    backgroundColor: 'rgba(247,247,247,1.0)',
+    paddingTop: 60,
+    padding: 60,
+    height: 44
+  }
+
+});
 
 // disabled for now, at least until we figure out if this
 // will have state or not
@@ -15,10 +28,10 @@ export class TwListView extends React.Component {
   render() {
     const props = this.props;
     return (
-      <ScrollView>
+      <ScrollView style={styles.container}>
         {props.data.map((item) => {
-          console.log(item.TITLE);
-          return (<Text key={item.OBJECTID}>{item.TITLE}</Text>);
+          console.log(item.LOCATION);
+          return (<Text key={item.OBJECTID}>{item.LOCATION}</Text>);
         })}
       </ScrollView>
     );
