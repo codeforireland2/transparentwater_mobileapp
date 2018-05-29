@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     padding: 60,
     height: 44
+
   }
 
 });
@@ -30,8 +31,17 @@ export class TwListView extends React.Component {
     return (
       <ScrollView style={styles.container}>
         {props.data.map((item) => {
+          console.log(item.TITLE);
           console.log(item.LOCATION);
-          return (<Text key={item.OBJECTID}>{item.LOCATION}</Text>);
+          console.log(item.NOTICETYPE);
+          return (
+            <Text style={{ fontWeight: 'bold' }} key={item.OBJECTID}>{item.TITLE}
+              <Text style={{ fontWeight: 'normal' }} key={item.OBJECTID}>{ item.LOCATION}
+                <Text style={{ fontWeight: 'normal' }} key={item.OBJECTID}>{item.NOTICETYPE}
+                </Text>
+              </Text>
+            </Text>
+          );
         })}
       </ScrollView>
     );
