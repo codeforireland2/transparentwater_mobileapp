@@ -76,7 +76,7 @@ export class TwMapView extends React.Component {
       }
     });
 
-    console.log('No of Markers: ', localNotices.length);
+    // console.log('No of Markers: ', localNotices.length);
     this.setState({
       markers: localNotices
     });
