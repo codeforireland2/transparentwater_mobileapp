@@ -3,7 +3,8 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { TabViewAnimated, TabBar } from 'react-native-tab-view';
 import { TwMapView } from './components/TwMapView';
 import { TwListView } from './components/TwListView';
-import sample from './data/sample-out.json';
+
+import { getInitialData } from './utils/api';
 
 const initialLayout = {
   height: 0,
@@ -30,12 +31,20 @@ export default class App extends React.Component {
       { key: 'list', title: 'List' },
       { key: 'map', title: 'Map' }
     ],
-    data: sample // eslint-disable-line react/no-unused-state
+    data: [] // eslint-disable-line react/no-unused-state
   };
 
-  /* eslint-disable react/no-unused-state */
-  _handleIndexChange = index => this.setState({ index });
-  /* eslint-enable react/no-unused-state */
+  /**
+   * @function componentDidMount
+   * Fetches Data from Api
+   */
+  componentDidMount() {
+    getInitialData().then((data) => {
+      this.setState({
+        data: data
+      });
+    });
+  }
 
   _renderFooter = props => <TabBar {...props} />;
 
@@ -44,9 +53,13 @@ export default class App extends React.Component {
     case 'map':
       return <TwMapView data={this.state.data} />;
     default:
-      return <TwListView data={sample} />;
+      return <TwListView data={this.state.data} />;
     }
   }
+
+  /* eslint-disable react/no-unused-state */
+  _handleIndexChange = index => this.setState({ index });
+  /* eslint-enable react/no-unused-state */
 
   /**
   * @function render

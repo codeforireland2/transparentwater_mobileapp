@@ -3,6 +3,8 @@
     "parser": "babel-eslint",
     "rules": {
         "indent": ["error", 2],
+        "arrow-body-style": "off",
+        "react/prop-types": "off",
         "max-len": [2, {"code": 100, "tabWidth": 2, "ignoreUrls": true}],
         "space-before-function-paren": "off",
         "prefer-destructuring": "off",

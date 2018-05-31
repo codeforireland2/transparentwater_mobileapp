@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderColor: '#cecece',
     marginBottom: 5,
-    marginTop: 15,
+    marginTop: 35,
     fontWeight: 'bold',
     marginHorizontal: 4,
   },
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 
 });
 
-TwListItem = (item) => {
+const TwListItem = (item) => {
   return (
     <View>
       <View style={styles.top} />
@@ -53,8 +53,8 @@ TwListItem = (item) => {
       <Text style={styles.text1} > {item.NOTICETYPE} </Text>
       <Text style={styles.text2} > {item.DESCRIPTION} </Text>
     </View>
-  )
-}
+  );
+};
 
 // disabled for now, at least until we figure out if this
 // will have state or not
@@ -66,8 +66,22 @@ TwListItem = (item) => {
 * the View has a bar
 */
 export class TwListView extends React.Component {
+  state = {
+    filterString: '',
+  }
 
-  _keyExtractor =  (item, index) => item.OBJECTID.toString();
+  _filter = (data) => {
+    const { filterString } = this.state;
+    const filter = new RegExp(filterString.toLowerCase());
+    if (!filterString) {
+      return data;
+    }
+    return data.filter((item) => {
+      return item.COUNTY.toLowerCase().match(filter);
+    });
+  }
+
+  _keyExtractor = item => item.OBJECTID.toString();
 
   /**
   * @function render
@@ -75,14 +89,14 @@ export class TwListView extends React.Component {
   render() {
     const { data } = this.props;
     return (
-      <View style={{flex: 1}}>
-        <TextInput 
+      <View style={{ flex: 1 }}>
+        <TextInput
           style={styles.textInput}
-          // onChangeText={(text) => this.filterSearch(text)}
+          onChangeText={text => this.setState({ filterString: text })}
         />
-        <FlatList 
-          data={data}
-          renderItem={({item}) => TwListItem(item)}
+        <FlatList
+          data={this._filter(data)}
+          renderItem={({ item }) => TwListItem(item)}
           keyExtractor={this._keyExtractor}
         />
       </View>
