@@ -9,7 +9,6 @@
         "object-shorthand": "off",
         "react/jsx-filename-extension": "off",
         "no-underscore-dangle": ["error", { "allowAfterThis": true }],
-        "comma-dangle": ["error", "never"],
         "import/prefer-default-export": "off",
 		 "require-jsdoc": ["error", {
 			"require": {

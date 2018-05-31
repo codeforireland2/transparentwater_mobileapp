@@ -7,7 +7,7 @@ import sample from './data/sample-out.json';
 
 const initialLayout = {
   height: 0,
-  width: Dimensions.get('window').width
+  width: Dimensions.get('window').width,
 };
 
 const styles = StyleSheet.create({ // eslint-disable-line no-unused-vars
@@ -15,8 +15,8 @@ const styles = StyleSheet.create({ // eslint-disable-line no-unused-vars
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });
 
 /**
@@ -28,9 +28,9 @@ export default class App extends React.Component {
     index: 0, // eslint-disable-line react/no-unused-state
     routes: [ // eslint-disable-line react/no-unused-state
       { key: 'list', title: 'List' },
-      { key: 'map', title: 'Map' }
+      { key: 'map', title: 'Map' },
     ],
-    data: sample // eslint-disable-line react/no-unused-state
+    data: sample, // eslint-disable-line react/no-unused-state
   };
 
   /* eslint-disable react/no-unused-state */
