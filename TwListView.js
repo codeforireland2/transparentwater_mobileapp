@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(247,247,247,1.0)',
     padding: 40,
     height: 44,
-    flexDirection: 'column'
+    flexDirection: 'column',
 
   },
   textInput: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 15,
     fontWeight: 'bold',
-    marginHorizontal: 4
+    marginHorizontal: 4,
 
   },
   top: {
@@ -33,13 +33,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 2,
     flexDirection: 'row',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
 
   },
   title: {
     height: 25,
     backgroundColor: 'steelblue',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
 
   },
   text1: {

@@ -5,11 +5,11 @@ import MapView from 'react-native-maps';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   map: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 /**
@@ -22,9 +22,9 @@ export class TwMapView extends React.Component {
       latitude: 53.350140,
       longitude: -6.266155,
       latitudeDelta: 0.2,
-      longitudeDelta: 0.2
+      longitudeDelta: 0.2,
     },
-    markers: []
+    markers: [],
   }
 
   /**
@@ -78,7 +78,7 @@ export class TwMapView extends React.Component {
 
     console.log('No of Markers: ', localNotices.length);
     this.setState({
-      markers: localNotices
+      markers: localNotices,
     });
   }
 
@@ -100,7 +100,7 @@ export class TwMapView extends React.Component {
               key={notice.OBJECTID}
               coordinate={{
                 latitude: notice.LAT,
-                longitude: notice.LONG
+                longitude: notice.LONG,
               }}
               title={notice.TITLE}
               description={notice.NOTICETYPE[0]}
@@ -134,6 +134,6 @@ TwMapView.propTypes = {
     PROJECT: PropTypes.string,
     LAT: PropTypes.number,
     LONG: PropTypes.number,
-    NOTICETYPE: PropTypes.arrayOf(PropTypes.string)
-  })).isRequired
+    NOTICETYPE: PropTypes.arrayOf(PropTypes.string),
+  })).isRequired,
 };
