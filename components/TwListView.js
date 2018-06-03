@@ -1,64 +1,33 @@
 import React from 'react';
-import { StyleSheet, FlatList, Text, TextInput, View } from 'react-native';
-/*
- * StyleSheet
- * textInput for search bar style
- * textBar between Title, Notice and Location
-*/
+import { View, SectionList, StatusBar, StyleSheet } from 'react-native';
+import { Header, ListItem, Body, Item, Input, Right, Icon, Text } from 'native-base';
+
+import { getNoticeType, groupBy } from '../utils/helpers';
+
 const styles = StyleSheet.create({
-  textInput: {
-    height: 45,
-    borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: 'transparent',
-    borderColor: '#cecece',
-    marginBottom: 5,
-    marginTop: 35,
-    fontWeight: 'bold',
-    marginHorizontal: 4,
+  header: {
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: 'white',
+    height: StatusBar.currentHeight + 60,
   },
-  top: {
-    height: 25,
-    backgroundColor: 'transparent',
-    borderRadius: 4,
-    justifyContent: 'space-between',
-    flex: 2,
-    flexDirection: 'row',
-  },
-  title: {
-    height: 25,
-    fontWeight: 'bold',
-    backgroundColor: 'steelblue',
-
-  },
-  text1: {
-    height: 28,
-    fontWeight: 'bold',
-    backgroundColor: 'skyblue',
-
-  },
-  text2: {
-    backgroundColor: 'powderblue',
-    fontWeight: 'bold'
-  },
-
 });
 
-const TwListItem = (item) => {
+const TwListItem = (item, onPress) => {
+  const type = getNoticeType(item.NOTICETYPE[0]);
   return (
-    <View>
-      <View style={styles.top} />
-      <Text style={styles.title} >{item.TITLE} </Text>
-      <Text style={styles.text1} > {item.LOCATION} </Text>
-      <Text style={styles.text1} > {item.NOTICETYPE} </Text>
-      <Text style={styles.text2} > {item.DESCRIPTION} </Text>
-    </View>
+    <ListItem onPress={() => onPress(item)}>
+      <Body>
+        <Text>{item.TITLE.split(' - ')[0]}</Text>
+        <Text style={type.getStyle()}>{type.getIcon()} {type.name}</Text>
+        <Text note numberOfLines={1}>{item.DESCRIPTION.replace(/<\/?[^>]+(>|$)/g, '')}</Text>
+      </Body>
+      <Right>
+        <Text note>{new Date(item.STARTDATE).toLocaleDateString()}</Text>
+      </Right>
+    </ListItem>
   );
 };
 
-// disabled for now, at least until we figure out if this
-// will have state or not
-/* eslint-disable react/prefer-stateless-function */
 /**
 * @class TwListView
 * display of the data in a list
@@ -66,18 +35,36 @@ const TwListItem = (item) => {
 * the View has a bar
 */
 export class TwListView extends React.Component {
+  static navigationOptions = () => {
+    return {
+      header: null,
+    };
+  };
+
   state = {
     filterString: '',
   }
 
   _filter = (data) => {
     const { filterString } = this.state;
-    const filter = new RegExp(filterString.toLowerCase());
     if (!filterString) {
       return data;
     }
+    const filterRegex = new RegExp(filterString.toLowerCase());
     return data.filter((item) => {
-      return item.COUNTY.toLowerCase().match(filter);
+      return item.COUNTY.toLowerCase().match(filterRegex) ||
+        item.COUNTY.toLowerCase().match(filterRegex);
+    });
+  }
+
+  _prepareData = (data) => {
+    const filteredData = this._filter(data);
+    const groupedData = groupBy(filteredData, 'COUNTY');
+    return Object.keys(groupedData).map((key) => {
+      return {
+        title: key,
+        data: groupedData[key],
+      };
     });
   }
 
@@ -87,20 +74,34 @@ export class TwListView extends React.Component {
   * @function render
   */
   render() {
-    const { data } = this.props;
+    const { data, refreshData, refreshing } = this.props.screenProps;
+    const onPress = (alertItem) => {
+      this.props.navigation.navigate('Details', { item: alertItem });
+    };
+    if (!data) return (<View><Text>Loading Data...</Text></View>);
     return (
       <View style={{ flex: 1 }}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={text => this.setState({ filterString: text })}
-        />
-        <FlatList
-          data={this._filter(data)}
-          renderItem={({ item }) => TwListItem(item)}
+        <Header searchBar rounded style={styles.header}>
+          <Item>
+            <Icon name="ios-search" />
+            <Input
+              placeholder="Search By County"
+              onChangeText={value => this.setState({ filterString: value })}
+            />
+          </Item>
+        </Header>
+        <SectionList
+          renderItem={({ item }) => TwListItem(item, onPress)}
+          renderSectionHeader={({ section: { title } }) => (
+            <ListItem itemDivider><Text>{ title }</Text></ListItem>
+          )}
+          sections={this._prepareData(data)}
+          refreshing={refreshing}
+          onRefresh={() => refreshData()}
           keyExtractor={this._keyExtractor}
         />
       </View>
     );
   }
 }
-/* eslint-enable react/prefer-stateless-function */
+

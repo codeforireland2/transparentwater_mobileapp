@@ -9,12 +9,13 @@
         "space-before-function-paren": "off",
         "prefer-destructuring": "off",
         "object-shorthand": "off",
+        "global-require": "off",
+        "no-param-reassign" : "off",
         "react/jsx-filename-extension": "off",
         "linebreak-style": "off",
         "no-underscore-dangle": ["error", { "allowAfterThis": true }],
-        "comma-dangle": "off",
         "import/prefer-default-export": "off",
-		 "require-jsdoc": ["error", {
+		 "require-jsdoc": ["off", {
 			"require": {
 			   "FunctionDeclaration": true,
 			   "MethodDefinition": true,

@@ -1,4 +1,4 @@
-import data from '../data/sample-out.json';
+import data from './sample.json';
 
 /**
  * @function getInitialData

@@ -8,9 +8,9 @@
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
+    "eslint-plugin-react": "^7.8.2",
     "jest": "^22.4.3",
     "jest-expo": "^27.0.1",
     "jsdoc": "^3.5.5",
@@ -23,7 +23,7 @@
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
-    "lint": "./node_modules/.bin/eslint .",
+    "lint": "./node_modules/.bin/eslint . --fix",
     "partial-lint": "git diff --name-only master... | grep js$ | xargs ./node_modules/.bin/eslint",
     "check": "npm run lint && npm run test",
     "tempcheck": "npm run partial-lint && npm run test",
@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "expo": "^26.0.0",
+    "native-base": "^2.4.5",
     "npm": "^5.8.0",
     "prop-types": "^15.6.1",
     "react": "16.3.0",
@@ -46,6 +47,10 @@
     "react-native-scripts": "^1.14.0",
     "react-native-searchbar": "^1.14.0",
     "react-native-tab-view": "^0.0.77",
-    "react-native-vector-icons": "^4.6.0"
+    "react-native-vector-icons": "^4.6.0",
+    "react-navigation": "^2.0.4",
+    "react-navigation-tabs": "^0.3.0",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0"
   }
 }

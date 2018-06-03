@@ -1,15 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableHighlight } from 'react-native';
+import { Text } from 'native-base';
 import MapView from 'react-native-maps';
+
+import { getNoticeType } from '../utils/helpers';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   map: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 /**
@@ -17,14 +19,20 @@ const styles = StyleSheet.create({
 * display of data on a map
 */
 export class TwMapView extends React.Component {
+  static navigationOptions = () => {
+    return {
+      header: null,
+    };
+  };
+
   state = {
     region: {
       latitude: 53.350140,
       longitude: -6.266155,
       latitudeDelta: 0.2,
-      longitudeDelta: 0.2
+      longitudeDelta: 0.2,
     },
-    markers: []
+    markers: [],
   }
 
   /**
@@ -55,7 +63,7 @@ export class TwMapView extends React.Component {
   */
   _findLocalMarkers() {
     const regionInfo = this.state.region;
-    const allNotices = this.props.data;
+    const allNotices = this.props.screenProps.data;
     const localNotices = [];
     const latDelta = regionInfo.latitudeDelta;
     const lngDelta = regionInfo.longitudeDelta;
@@ -78,7 +86,7 @@ export class TwMapView extends React.Component {
 
     // console.log('No of Markers: ', localNotices.length);
     this.setState({
-      markers: localNotices
+      markers: localNotices,
     });
   }
 
@@ -87,6 +95,9 @@ export class TwMapView extends React.Component {
   * renders the map and markers initially
   */
   render() {
+    const onPress = (item) => {
+      this.props.navigation.navigate('Details', { item });
+    };
     return (
       <View style={styles.container}>
         <MapView
@@ -95,45 +106,32 @@ export class TwMapView extends React.Component {
           onRegionChangeComplete={(region) => { this.onRegionChange(region); }}
           showsUserLocation={true} // eslint-disable-line react/jsx-boolean-value
         >
-          {this.state.markers.map(notice => (
-            <MapView.Marker
-              key={notice.OBJECTID}
-              coordinate={{
-                latitude: notice.LAT,
-                longitude: notice.LONG
-              }}
-              title={notice.TITLE}
-              description={notice.NOTICETYPE[0]}
-            />
-          ))}
+          {this.state.markers.map((notice) => {
+            const type = getNoticeType(notice.NOTICETYPE[0]);
+            return (
+              <MapView.Marker
+                key={notice.OBJECTID}
+                coordinate={{
+                  latitude: notice.LAT,
+                  longitude: notice.LONG,
+                }}
+                title={notice.TITLE}
+                description={notice.NOTICETYPE[0]}
+              >
+                <MapView.Callout onPress={() => onPress(notice)}>
+                  <TouchableHighlight style={{ backgroundColor: 'white' }}>
+                    <View>
+                      <Text>{notice.TITLE.split(' - ')[0]}</Text>
+                      <Text style={type.getStyle()}>{type.getIcon()} {type.name}</Text>
+                      <Text note>{new Date(notice.STARTDATE).toLocaleDateString()}</Text>
+                    </View>
+                  </TouchableHighlight>
+                </MapView.Callout>
+              </MapView.Marker>
+            );
+          })}
         </MapView>
       </View>
     );
   }
 }
-
-TwMapView.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    OBJECTID: PropTypes.number,
-    WORKTYPE: PropTypes.string,
-    TITLE: PropTypes.string,
-    STARTDATE: PropTypes.number,
-    ENDDATE: PropTypes.number,
-    CONTACTDETAILS: PropTypes.string,
-    AFFECTEDPREMISES: PropTypes.string,
-    TRAFFICIMPLICATIONS: PropTypes.string,
-    DESCRIPTION: PropTypes.string,
-    STATUS: PropTypes.string,
-    GLOBALID: PropTypes.string,
-    APPROVALSTATUS: PropTypes.string,
-    LOCATION: PropTypes.string,
-    PRIORITY: PropTypes.string,
-    COUNTY: PropTypes.string,
-    REFERENCENUM: PropTypes.string,
-    PROJECTNUMBER: PropTypes.string,
-    PROJECT: PropTypes.string,
-    LAT: PropTypes.number,
-    LONG: PropTypes.number,
-    NOTICETYPE: PropTypes.arrayOf(PropTypes.string)
-  })).isRequired
-};

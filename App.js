@@ -1,79 +1,118 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
-import { TabViewAnimated, TabBar } from 'react-native-tab-view';
-import { TwMapView } from './components/TwMapView';
-import { TwListView } from './components/TwListView';
+import { View, StyleSheet } from 'react-native';
+import { Icon, Text, Spinner } from 'native-base';
+import { Font } from 'expo';
+import { createStackNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
+import { TwMapView } from './components/TwMapView';
+import { TwItemView } from './components/TwItemView';
+import { TwListView } from './components/TwListView';
 import { getInitialData } from './utils/api';
 
-const initialLayout = {
-  height: 0,
-  width: Dimensions.get('window').width
-};
 
-const styles = StyleSheet.create({ // eslint-disable-line no-unused-vars
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+const styles = StyleSheet.create({
+  loader: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
   }
-});
+})
 
 /**
 * @class App
 * Main View of the application showing tabs for the list and mapview
 */
-export default class App extends React.Component {
-  state = {
-    index: 0, // eslint-disable-line react/no-unused-state
-    routes: [ // eslint-disable-line react/no-unused-state
-      { key: 'list', title: 'List' },
-      { key: 'map', title: 'Map' }
-    ],
-    data: [] // eslint-disable-line react/no-unused-state
-  };
+class App extends React.Component {
+  constructor(options) {
+    super(options);
+    this.state = {
+      data: [],
+      refreshing: false,
+    };
+  }
 
-  /**
-   * @function componentDidMount
-   * Fetches Data from Api
-   */
   componentDidMount() {
+    // Load Fonts
+    Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+    }).then(() => this.setState({ fontLoaded: true }));
+
+    // Load Initial Data
     getInitialData().then((data) => {
       this.setState({
-        data: data
+        data: data,
       });
     });
   }
 
-  _renderFooter = props => <TabBar {...props} />;
-
-  _renderScene = ({ route }) => {
-    switch (route.key) {
-    case 'map':
-      return <TwMapView data={this.state.data} />;
-    default:
-      return <TwListView data={this.state.data} />;
-    }
+  _refreshData = () => {
+    this.setState({ refreshing: true });
+    getInitialData().then((data) => {
+      this.setState({
+        data: data,
+        refreshing: false,
+      });
+    });
   }
 
-  /* eslint-disable react/no-unused-state */
-  _handleIndexChange = index => this.setState({ index });
-  /* eslint-enable react/no-unused-state */
-
-  /**
-  * @function render
-  * setting up the view
-  */
   render() {
-    return (
-      <TabViewAnimated
-        navigationState={this.state}
-        renderScene={this._renderScene}
-        renderFooter={this._renderFooter}
-        onIndexChange={this._handleIndexChange}
-        initialLayout={initialLayout}
-      />
-    );
+    const screenProps = {
+      data: this.state.data,
+      refreshing: this.state.refreshing,
+      refreshData: this._refreshData,
+    };
+    if(!screenProps.data.length || !this.state.fontLoaded) {
+      return (
+        <View style={styles.loader}>
+          <Spinner color='grey' />
+          <Text> Fetching Data... </Text>
+        </View>
+      )
+    }
+    return (<Navigation screenProps={screenProps} />);
   }
 }
+
+const ListStack = createStackNavigator({
+  List: { screen: TwListView },
+  Details: { screen: TwItemView },
+});
+
+const MapStack = createStackNavigator({
+  List: { screen: TwMapView },
+  Details: { screen: TwItemView },
+});
+
+const Navigation = createBottomTabNavigator(
+  {
+    ListView: {
+      screen: ListStack,
+    },
+    MapView: {
+      screen: MapStack,
+    },
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'ListView') {
+          iconName = 'alert';
+        } else if (routeName === 'MapView') {
+          iconName = 'map';
+        }
+        return <Icon name={iconName} size={25} style={{ color: tintColor }} />;
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: 'tomato',
+      inactiveTintColor: 'gray',
+    },
+  },
+);
+
+export default App;
