@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 2,
     flexDirection: 'row',
-    fontWeight: 'bold',
-
   },
   title: {
     height: 25,
@@ -74,18 +72,17 @@ export class TwListView extends React.Component {
           style={styles.textInput}
           // onChangeText={(text) => this.filterSearch(text)}
         />
-        {props.data.map((item) => {
-          console.log(item.TITLE);
-          return (
-            <View>
+        {props.data.map(item =>
+          // console.log(item.TITLE);
+          (
+            <View key={item.OBJECTID}>
               <View style={styles.top} />
               <Text style={styles.title} >{item.TITLE} </Text>
               <Text style={styles.text1} > {item.LOCATION} </Text>
               <Text style={styles.text1} > {item.NOTICETYPE} </Text>
               <Text style={styles.text2} > {item.DESCRIPTION} </Text>
             </View>
-          );
-        })}
+          ))}
       </ScrollView>
     );
   }
