@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { TabViewAnimated, TabBar } from 'react-native-tab-view';
-import { TwMapView } from './TwMapView';
-import { TwListView } from './TwListView';
+import { TwMapView } from './components/TwMapView';
+import { TwListView } from './components/TwListView';
 import sample from './data/sample-out.json';
 
 const initialLayout = {
