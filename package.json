@@ -24,6 +24,7 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "lint": "./node_modules/.bin/eslint .",
+    "lint-fix": "./node_modules/.bin/eslint . --fix",
     "partial-lint": "git diff --name-only master... | grep js$ | xargs ./node_modules/.bin/eslint",
     "check": "npm run lint && npm run test",
     "tempcheck": "npm run partial-lint && npm run test",
