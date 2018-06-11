@@ -4,7 +4,7 @@ import {
   createBottomTabNavigator,
 } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-
+import PropTypes from 'prop-types';
 import { TwMapView } from './components/TwMapView';
 import { TwListView } from './components/TwListView';
 import { getInitialData } from './utils/api';
@@ -54,6 +54,40 @@ const MapStack = createStackNavigator({
   Map: { screen: TwMapView },
 });
 
+/**
+ * @function
+ * renders mapIcon
+*/
+function MapIcon({ tintColor }) {
+  return <Ionicons name="md-map" size={25} style={{ color: tintColor }} />;
+}
+
+MapIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
+/**
+ * @function
+ * renders listIcon
+*/
+function ListIcon({ tintColor }) {
+  return <Ionicons name="md-alert" size={25} style={{ color: tintColor }} />;
+}
+
+ListIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
+ListStack.navigationOptions = {
+  tabBarLabel: 'List',
+  tabBarIcon: ListIcon,
+};
+
+MapStack.navigationOptions = {
+  tabBarLabel: 'Map',
+  tabBarIcon: MapIcon,
+};
+
 const RootNavigation = createBottomTabNavigator(
   {
     ListView: {
@@ -64,25 +98,6 @@ const RootNavigation = createBottomTabNavigator(
     },
   },
   {
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName;
-        switch (routeName) {
-        case 'ListView':
-          iconName = 'alert';
-          break;
-        case 'MapScreen':
-          iconName = 'map';
-          break;
-        default:
-          iconName = 'questions';
-          break;
-        }
-        // TODO: Make this platform specific
-        return <Ionicons name={`md-${iconName}`} size={25} style={{ color: tintColor }} />;
-      },
-    }),
     tabBarOptions: {
       activeTintColor: 'tomato',
       inactiveColor: 'gray',
