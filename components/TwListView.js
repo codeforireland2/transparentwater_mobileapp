@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, ScrollView, Text, TextInput, View } from 'react-native';
+
 /*
  * StyleSheet
  * textInput for search bar style
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
   },
 
 });
+
 // disabled for now, at least until we figure out if this
 // will have state or not
 /* eslint-disable react/prefer-stateless-function */
@@ -61,11 +64,15 @@ const styles = StyleSheet.create({
 * the View has a bar
 */
 export class TwListView extends React.Component {
+  static navigationOptions = () => ({
+    header: null,
+  });
+
   /**
   * @function render
   */
   render() {
-    const props = this.props;
+    const props = this.props.screenProps;
     return (
       <ScrollView style={styles.container}>
         <TextInput
@@ -88,3 +95,31 @@ export class TwListView extends React.Component {
   }
 }
 /* eslint-enable react/prefer-stateless-function */
+
+TwListView.propTypes = {
+  screenProps: PropTypes.shape({
+    data: PropTypes.arrayOf(PropTypes.shape({
+      OBJECTID: PropTypes.number,
+      WORKTYPE: PropTypes.string,
+      TITLE: PropTypes.string,
+      STARTDATE: PropTypes.number,
+      ENDDATE: PropTypes.number,
+      CONTACTDETAILS: PropTypes.string,
+      AFFECTEDPREMISES: PropTypes.string,
+      TRAFFICIMPLICATIONS: PropTypes.string,
+      DESCRIPTION: PropTypes.string,
+      STATUS: PropTypes.string,
+      GLOBALID: PropTypes.string,
+      APPROVALSTATUS: PropTypes.string,
+      LOCATION: PropTypes.string,
+      PRIORITY: PropTypes.string,
+      COUNTY: PropTypes.string,
+      REFERENCENUM: PropTypes.string,
+      PROJECTNUMBER: PropTypes.string,
+      PROJECT: PropTypes.string,
+      LAT: PropTypes.number,
+      LONG: PropTypes.number,
+      NOTICETYPE: PropTypes.arrayOf(PropTypes.string),
+    })).isRequired,
+  }).isRequired,
+};
