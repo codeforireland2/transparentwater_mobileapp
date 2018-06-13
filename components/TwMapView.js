@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
 * display of data on a map
 */
 export class TwMapView extends React.Component {
+  static navigationOptions = () => ({
+    header: null,
+  });
+
   state = {
     region: {
       latitude: 53.350140,
@@ -55,7 +59,7 @@ export class TwMapView extends React.Component {
   */
   _findLocalMarkers() {
     const regionInfo = this.state.region;
-    const allNotices = this.props.data;
+    const allNotices = this.props.screenProps.data;
     const localNotices = [];
     const latDelta = regionInfo.latitudeDelta;
     const lngDelta = regionInfo.longitudeDelta;
@@ -113,27 +117,29 @@ export class TwMapView extends React.Component {
 }
 
 TwMapView.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    OBJECTID: PropTypes.number,
-    WORKTYPE: PropTypes.string,
-    TITLE: PropTypes.string,
-    STARTDATE: PropTypes.number,
-    ENDDATE: PropTypes.number,
-    CONTACTDETAILS: PropTypes.string,
-    AFFECTEDPREMISES: PropTypes.string,
-    TRAFFICIMPLICATIONS: PropTypes.string,
-    DESCRIPTION: PropTypes.string,
-    STATUS: PropTypes.string,
-    GLOBALID: PropTypes.string,
-    APPROVALSTATUS: PropTypes.string,
-    LOCATION: PropTypes.string,
-    PRIORITY: PropTypes.string,
-    COUNTY: PropTypes.string,
-    REFERENCENUM: PropTypes.string,
-    PROJECTNUMBER: PropTypes.string,
-    PROJECT: PropTypes.string,
-    LAT: PropTypes.number,
-    LONG: PropTypes.number,
-    NOTICETYPE: PropTypes.arrayOf(PropTypes.string),
-  })).isRequired,
+  screenProps: PropTypes.shape({
+    data: PropTypes.arrayOf(PropTypes.shape({
+      OBJECTID: PropTypes.number,
+      WORKTYPE: PropTypes.string,
+      TITLE: PropTypes.string,
+      STARTDATE: PropTypes.number,
+      ENDDATE: PropTypes.number,
+      CONTACTDETAILS: PropTypes.string,
+      AFFECTEDPREMISES: PropTypes.string,
+      TRAFFICIMPLICATIONS: PropTypes.string,
+      DESCRIPTION: PropTypes.string,
+      STATUS: PropTypes.string,
+      GLOBALID: PropTypes.string,
+      APPROVALSTATUS: PropTypes.string,
+      LOCATION: PropTypes.string,
+      PRIORITY: PropTypes.string,
+      COUNTY: PropTypes.string,
+      REFERENCENUM: PropTypes.string,
+      PROJECTNUMBER: PropTypes.string,
+      PROJECT: PropTypes.string,
+      LAT: PropTypes.number,
+      LONG: PropTypes.number,
+      NOTICETYPE: PropTypes.arrayOf(PropTypes.string),
+    })).isRequired,
+  }).isRequired,
 };
