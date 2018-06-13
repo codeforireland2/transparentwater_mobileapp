@@ -1,100 +1,115 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, ScrollView, Text, TextInput, View } from 'react-native';
+import { StyleSheet, SectionList, StatusBar, View } from 'react-native';
+import { Header, ListItem, Body, Item, Input, Right, Icon, Text } from 'native-base';
 
-/*
- * StyleSheet
- * textInput for search bar style
- * textBar between Title, Notice and Location
-*/
+import { getNoticeType, groupBy, formatDate } from '../utils/helpers';
+
 const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1.0,
-    backgroundColor: 'rgba(247,247,247,1.0)',
-    padding: 40,
-    height: 44,
-    flexDirection: 'column',
-
+  header: {
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: 'white',
+    height: StatusBar.currentHeight + 60,
   },
-  textInput: {
-    height: 30,
-    borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: 'transparent',
-    borderColor: '#cecece',
-    marginBottom: 5,
-    marginTop: 15,
-    fontWeight: 'bold',
-    marginHorizontal: 4,
-
-  },
-  top: {
-    height: 25,
-    backgroundColor: 'transparent',
-    borderRadius: 4,
-    justifyContent: 'space-between',
-    flex: 2,
-    flexDirection: 'row',
-  },
-  title: {
-    height: 25,
-    backgroundColor: 'steelblue',
-    fontWeight: 'bold',
-
-  },
-  text1: {
-    height: 28,
-    backgroundColor: 'skyblue',
-
-  },
-  text2: {
-    backgroundColor: 'powderblue',
-
-  },
-
 });
 
-// disabled for now, at least until we figure out if this
-// will have state or not
-/* eslint-disable react/prefer-stateless-function */
+/**
+ * @function
+ * Renders each List Item
+ */
+const TwListItem = (item) => {
+  const type = getNoticeType(item.NOTICETYPE[0]);
+  return (
+    <ListItem>
+      <Body>
+        <Text>{item.TITLE.split(' - ')[0]}</Text>
+        <Text style={type.getStyle()}>{type.getIcon()} {type.name} </Text>
+        <Text note numberOfLines={1}>{item.DESCRIPTION.replace(/<\/?[^>]+(>|$)/g, '')}</Text>
+      </Body>
+      <Right>
+        <Text note>{formatDate(new Date(item.STARTDATE))}</Text>
+      </Right>
+    </ListItem>
+  );
+};
+
 /**
 * @class TwListView
 * display of the data in a list
 * the title is in bold
 * the View has a bar
 */
-export class TwListView extends React.Component {
+class TwListView extends React.Component {
   static navigationOptions = () => ({
     header: null,
   });
+
+  state = {
+    filterString: '',
+  }
+
+  /**
+   * @function _filter
+   * filters items
+   */
+  _filter = (data) => {
+    const { filterString } = this.state;
+    if (!filterString) {
+      return data;
+    }
+    const filterRegex = new RegExp(filterString.toLowerCase());
+    return data.filter(item => item.COUNTY.toLowerCase().match(filterRegex));
+  }
+
+  /**
+   * @function _prepareData
+   * apply filter and group
+   */
+  _prepareData = (data) => {
+    const filteredData = this._filter(data);
+    const groupedData = groupBy(filteredData, 'COUNTY');
+    return Object.keys(groupedData).map(key => ({
+      title: key,
+      data: groupedData[key],
+    }));
+  }
+
+  /**
+   * @function _keyExtractor
+   * used to extract key for List
+   */
+  _keyExtractor = item => item.OBJECTID.toString();
+
 
   /**
   * @function render
   */
   render() {
-    const props = this.props.screenProps;
+    const { data } = this.props.screenProps;
+    if (!data) return (<View><Text>Loading Data...</Text></View>);
     return (
-      <ScrollView style={styles.container}>
-        <TextInput
-          style={styles.textInput}
-          // onChangeText={(text) => this.filterSearch(text)}
+      <View style={{ flex: 1 }}>
+        <Header searchBar rounded style={styles.header}>
+          <Item>
+            <Icon name="ios-search" />
+            <Input
+              placeholder="Search By County"
+              onChangeText={value => this.setState({ filterString: value })}
+            />
+          </Item>
+        </Header>
+        <SectionList
+          renderItem={({ item }) => TwListItem(item)}
+          renderSectionHeader={({ section: { title } }) => (
+            <ListItem itemDivider><Text>{ title }</Text></ListItem>
+          )}
+          sections={this._prepareData(data)}
+          keyExtractor={this._keyExtractor}
         />
-        {props.data.map(item =>
-          // console.log(item.TITLE);
-          (
-            <View key={item.OBJECTID}>
-              <View style={styles.top} />
-              <Text style={styles.title} >{item.TITLE} </Text>
-              <Text style={styles.text1} > {item.LOCATION} </Text>
-              <Text style={styles.text1} > {item.NOTICETYPE} </Text>
-              <Text style={styles.text2} > {item.DESCRIPTION} </Text>
-            </View>
-          ))}
-      </ScrollView>
+      </View>
     );
   }
 }
-/* eslint-enable react/prefer-stateless-function */
 
 TwListView.propTypes = {
   screenProps: PropTypes.shape({
@@ -123,3 +138,5 @@ TwListView.propTypes = {
     })).isRequired,
   }).isRequired,
 };
+
+export { TwListView };
