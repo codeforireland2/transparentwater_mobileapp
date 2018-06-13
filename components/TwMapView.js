@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableHighlight, Text } from 'react-native';
 import MapView from 'react-native-maps';
+import { getNoticeType } from '../utils/helpers';
 
 const styles = StyleSheet.create({
   container: {
@@ -91,6 +92,9 @@ export class TwMapView extends React.Component {
   * renders the map and markers initially
   */
   render() {
+    const onPress = (item) => {
+      this.props.navigation.navigate('Item', { item });
+    };
     return (
       <View style={styles.container}>
         <MapView
@@ -99,17 +103,30 @@ export class TwMapView extends React.Component {
           onRegionChangeComplete={(region) => { this.onRegionChange(region); }}
           showsUserLocation={true} // eslint-disable-line react/jsx-boolean-value
         >
-          {this.state.markers.map(notice => (
-            <MapView.Marker
-              key={notice.OBJECTID}
-              coordinate={{
-                latitude: notice.LAT,
-                longitude: notice.LONG,
-              }}
-              title={notice.TITLE}
-              description={notice.NOTICETYPE[0]}
-            />
-          ))}
+          {this.state.markers.map((notice) => {
+            const type = getNoticeType(notice.NOTICETYPE[0]);
+            return (
+              <MapView.Marker
+                key={notice.OBJECTID}
+                coordinate={{
+                  latitude: notice.LAT,
+                  longitude: notice.LONG,
+                }}
+                title={notice.TITLE}
+                description={notice.NOTICETYPE[0]}
+              >
+                <MapView.Callout onPress={() => onPress(notice)}>
+                  <TouchableHighlight style={{ backgroundColor: 'white' }}>
+                    <View>
+                      <Text>{notice.TITLE.split(' - ')[0]}</Text>
+                      <Text style={type.getStyle()}>{type.getIcon()} {type.name}</Text>
+                      <Text note>{new Date(notice.STARTDATE).toLocaleDateString()}</Text>
+                    </View>
+                  </TouchableHighlight>
+                </MapView.Callout>
+              </MapView.Marker>
+            );
+          })}
         </MapView>
       </View>
     );
