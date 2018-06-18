@@ -81,7 +81,14 @@ export function getNoticeType(type) {
 /**
  * @function formatDate
  * formatsDate in irish format
+ * formats as DD/MM/YY e.g.
+ * 01/21/2008
  */
 export function formatDate(date) {
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getYear() - 100}`;
+  let day = `${date.getDate()}`;
+  let month = `${date.getMonth() + 1}`;
+  const year = (`${date.getFullYear()}`).substr(2, 2);
+  day = day.length === 1 ? `0${day}` : day;
+  month = month.length === 1 ? `0${month}` : month;
+  return [day, month, year].join('/');
 }

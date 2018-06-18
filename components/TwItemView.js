@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text } from 'native-base';
-import { getNoticeType } from '../utils/helpers';
+import { getNoticeType, formatDate } from '../utils/helpers';
 
 const styles = StyleSheet.create({
   title: {
@@ -23,6 +23,7 @@ class TwItemView extends React.Component {
     }
     return {};
   };
+
   /**
    * @function render
    * renders component
@@ -40,7 +41,7 @@ class TwItemView extends React.Component {
         <Text note style={styles.title}>Description</Text>
         <Text>{alertItem.DESCRIPTION.replace(/<\/?[^>]+(>|$)/g, '')} </Text>
         <Text note style={styles.title}>Date</Text>
-        <Text>{new Date(alertItem.STARTDATE).toLocaleDateString()}</Text>
+        <Text>{formatDate(new Date(alertItem.STARTDATE))}</Text>
         { alertItem.AFFECTEDPREMISES && (
           <View>
             <Text note style={styles.title}>Affected Premises</Text>
