@@ -28,16 +28,21 @@
     "partial-lint": "git diff --name-only master... | grep js$ | xargs ./node_modules/.bin/eslint",
     "check": "npm run lint && npm run test",
     "tempcheck": "npm run partial-lint && npm run test",
-    "test": "jest"
+    "test": "jest",
+    "watch": "jest --watch"
   },
   "author": "",
   "license": "ISC",
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+      "transformIgnorePatterns": [
+        "node_modules/(?!native-base-shoutem-theme|react-native-easy-grid|native-base|react-native|react-navigation|expo|@expo)"
+      ]
   },
   "dependencies": {
     "@expo/vector-icons": "^6.3.1",
     "expo": "^26.0.0",
+    "native-base": "^2.5.1",
     "npm": "^5.8.0",
     "prop-types": "^15.6.1",
     "react": "16.3.0",
