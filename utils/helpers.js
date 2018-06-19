@@ -81,7 +81,9 @@ export function getNoticeType(type) {
 /**
  * @function formatDate
  * formatsDate in irish format
+ * formats as DD/MM/YY e.g.
+ * 01/21/2008
  */
 export function formatDate(date) {
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getYear() - 100}`;
+  return date.toLocaleDateString('en-GB');
 }

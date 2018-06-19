@@ -17,10 +17,10 @@ const styles = StyleSheet.create({
  * @function
  * Renders each List Item
  */
-const TwListItem = (item) => {
+const TwListItem = (item, onPress) => {
   const type = getNoticeType(item.NOTICETYPE[0]);
   return (
-    <ListItem>
+    <ListItem onPress={() => onPress(item)}>
       <Body>
         <Text>{item.TITLE.split(' - ')[0]}</Text>
         <Text style={type.getStyle()}>{type.getIcon()} {type.name} </Text>
@@ -87,6 +87,9 @@ class TwListView extends React.Component {
   render() {
     const { data } = this.props.screenProps;
     if (!data) return (<View><Text>Loading Data...</Text></View>);
+    const onPress = (alertItem) => {
+      this.props.navigation.navigate('Item', { item: alertItem });
+    };
     return (
       <View style={{ flex: 1 }}>
         <Header searchBar rounded style={styles.header}>
@@ -99,7 +102,7 @@ class TwListView extends React.Component {
           </Item>
         </Header>
         <SectionList
-          renderItem={({ item }) => TwListItem(item)}
+          renderItem={({ item }) => TwListItem(item, onPress)}
           renderSectionHeader={({ section: { title } }) => (
             <ListItem itemDivider><Text>{ title }</Text></ListItem>
           )}

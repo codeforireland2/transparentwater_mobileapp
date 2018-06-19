@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { TwMapView } from './components/TwMapView';
 import { TwListView } from './components/TwListView';
+import { TwItemView } from './components/TwItemView';
 import { getInitialData } from './utils/api';
 
 
@@ -48,10 +49,12 @@ class App extends React.Component {
 
 const ListStack = createStackNavigator({
   List: { screen: TwListView },
+  Item: { screen: TwItemView },
 });
 
 const MapStack = createStackNavigator({
   Map: { screen: TwMapView },
+  Item: { screen: TwItemView },
 });
 
 /**

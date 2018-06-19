@@ -7,6 +7,7 @@
         "space-before-function-paren": "off",
         "prefer-destructuring": "off",
         "object-shorthand": "off",
+        "react/prop-types": ["error", { "ignore": ["navigation"] }],
         "react/jsx-filename-extension": "off",
         "no-underscore-dangle": ["error", { "allowAfterThis": true }],
         "import/prefer-default-export": "off",
