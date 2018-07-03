@@ -8,6 +8,9 @@ import PropTypes from 'prop-types';
 import { TwMapView } from './components/TwMapView';
 import { TwListView } from './components/TwListView';
 import { TwItemView } from './components/TwItemView';
+import { TwFavoriteView } from './components/TwFavoriteView';
+import { TwAboutView } from './components/TwAboutView';
+import { TwSettingsView } from './components/TwSettingsView';
 import { getInitialData } from './utils/api';
 
 
@@ -18,6 +21,7 @@ import { getInitialData } from './utils/api';
 class App extends React.Component {
   state = {
     data: [],
+    favoriteCounties: [],
   }
 
   /**
@@ -33,24 +37,39 @@ class App extends React.Component {
   }
 
   /**
+   * @function toggleFav
+   * toggles a favirote county
+   */
+  toggleFav(county) {
+    this.setState((prevState) => {
+      if (prevState.favoriteCounties.indexOf(county) > 0) {
+        return {
+          favoriteCounties: prevState.favoriteCounties.filter(x => x !== county),
+        };
+      }
+      prevState.favoriteCounties.push(county);
+      return {
+        favoriteCounties: prevState.favoriteCounties,
+      };
+    });
+  }
+
+  /**
   * @function render
   * setting up the view
   */
   render() {
-    const { data } = this.state;
+    const { data, favoriteCounties } = this.state;
     const screenProps = {
       data,
+      favoriteCounties,
+      toggleFav: county => this.toggleFav(county),
     };
     return (
       <RootNavigation screenProps={screenProps} />
     );
   }
 }
-
-const ListStack = createStackNavigator({
-  List: { screen: TwListView },
-  Item: { screen: TwItemView },
-});
 
 const MapStack = createStackNavigator({
   Map: { screen: TwMapView },
@@ -69,6 +88,16 @@ MapIcon.propTypes = {
   tintColor: PropTypes.string.isRequired,
 };
 
+MapStack.navigationOptions = {
+  tabBarLabel: 'Map',
+  tabBarIcon: MapIcon,
+};
+
+const ListStack = createStackNavigator({
+  List: { screen: TwListView },
+  Item: { screen: TwItemView },
+});
+
 /**
  * @function
  * renders listIcon
@@ -86,10 +115,29 @@ ListStack.navigationOptions = {
   tabBarIcon: ListIcon,
 };
 
-MapStack.navigationOptions = {
-  tabBarLabel: 'Map',
-  tabBarIcon: MapIcon,
+const SettingsStack = createStackNavigator({
+  Settings: { screen: TwSettingsView },
+  Favorite: { screen: TwFavoriteView },
+  About: { screen: TwAboutView },
+});
+
+/**
+ * @function
+ * renders SettingsIcon
+*/
+function SettingsIcon({ tintColor }) {
+  return <Ionicons name="md-cog" size={25} style={{ color: tintColor }} />;
+}
+
+SettingsIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
 };
+
+SettingsStack.navigationOptions = {
+  tabBarLabel: 'Settings',
+  tabBarIcon: SettingsIcon,
+};
+
 
 const RootNavigation = createBottomTabNavigator(
   {
@@ -98,6 +146,9 @@ const RootNavigation = createBottomTabNavigator(
     },
     MapScreen: {
       screen: MapStack,
+    },
+    SettingsStack: {
+      screen: SettingsStack,
     },
   },
   {
