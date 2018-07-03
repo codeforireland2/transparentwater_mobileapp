@@ -112,7 +112,7 @@ export class TwMapView extends React.Component {
                   latitude: notice.LAT,
                   longitude: notice.LONG,
                 }}
-				pinColor={type.getStyle().color}
+                pinColor={type.getStyle().color}
                 title={notice.TITLE}
                 description={notice.NOTICETYPE[0]}
               >
