@@ -12,6 +12,7 @@ import { TwFavoriteView } from './components/TwFavoriteView';
 import { TwAboutView } from './components/TwAboutView';
 import { TwSettingsView } from './components/TwSettingsView';
 import { getInitialData } from './utils/api';
+import { setSettings, getSettings } from './utils/localstorage';
 
 
 /**
@@ -34,6 +35,10 @@ class App extends React.Component {
         data: data,
       });
     });
+
+    getSettings().then((settings) => {
+      this.setState(state => Object.assign({}, state, settings));
+    });
   }
 
   /**
@@ -48,6 +53,9 @@ class App extends React.Component {
         };
       }
       prevState.favoriteCounties.push(county);
+      setSettings({
+        favoriteCounties: prevState.favoriteCounties,
+      });
       return {
         favoriteCounties: prevState.favoriteCounties,
       };
